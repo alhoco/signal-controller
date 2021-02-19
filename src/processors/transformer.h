@@ -2,11 +2,11 @@
 #define TRANSFORMER_H
 
 namespace OffsetTransformer {
-    float offset = -1.0;
-    float scale = 0.5;
+    float max_bin = 1023;
+    float max_temp = 50;
 
     float transform(float input) {
-        return (input - offset) * scale;
+        return (input * max_temp) / max_bin;
     }
 }
 
