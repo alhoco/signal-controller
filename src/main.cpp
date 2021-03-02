@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <settings.h>
 #include <processors/transformer.h>
+#include <Output/Output.h>
 
 
 void setup() {
@@ -14,5 +15,7 @@ void loop() {
   int setpoint_signal = analogRead(A1);
   int input_signal = analogRead(A0);
   float processed_signal = OffsetTransformer::transform(input_signal);
+  output::Output(processed_signal, setpoint_signal);
+
   
 }
