@@ -21,6 +21,12 @@ void loop() {
   int aggregated_signal = Aggregator::aggregator();
   Alarm::alarm(aggregated_signal);
 
-  
+  Serial.println("--------------- Muestreo de Variables ---------------");
+  Serial.print("Temperatura: ");
+  Serial.println(processed_signal);
+  Serial.print("Estado compresor: ");
+  Serial.println(output::compressor_state);
+  Serial.print("Encendidos continuos compresor: ");
+  Serial.println(Aggregator::compressor_start_counter);
   
 }
