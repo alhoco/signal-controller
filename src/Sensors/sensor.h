@@ -12,11 +12,33 @@ class SensorABS {
             void execute();
         private:
             T last_value;
-            Read <T> value;
-            uint8_t Id;
-            virtual T read();
+            Read<T> value;
+            uint8_t id;
+            virtual T Read();
 };
 
+template<class T>
+    SensorABS<T>::SensorABS(uint8_t id){
+        this->id = id;
+    }
 
+template<class T>
+    Read<T> SensorABS<T>::getValue(){
+        return this->value;
+    }
+
+template<class T>
+    uint8_t SensorABS<T>::getId(){
+        return this->id;
+    }
+
+template<class T>
+void SensorABS<T>::execute(){
+    T new_value = this->read();
+    if (new_value != this->raw_value){
+        this->raw_value = new_value;
+        this->value = Read<T>(new_value, this->id);
+    }
+}
 
 #endif
