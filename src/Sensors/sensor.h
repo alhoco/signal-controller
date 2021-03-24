@@ -10,12 +10,14 @@ class SensorABS {
             SensorABS(uint8_t id);
             Read<T> getValue();
             uint8_t getId();
-            void execute();
+            bool hasChanged();
+            void execute();   
         private:
             T last_value;
             Read<T> value;
             uint8_t id;
             virtual T Read();
+            bool changed;
 };
 
 template<class T>
@@ -27,6 +29,11 @@ template<class T>
     Read<T> SensorABS<T>::getValue(){
         return this->value;
     }
+
+template<class T>
+    bool SensorABS<T>::hasChanged(){
+        return this->changed;
+}
 
 template<class T>
     uint8_t SensorABS<T>::getId(){
@@ -41,5 +48,6 @@ void SensorABS<T>::execute(){
         this->value = Read<T>(new_value, this->id);
     }
 }
+
 
 #endif
