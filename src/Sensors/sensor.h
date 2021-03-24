@@ -2,6 +2,7 @@
 #define SENSOR_H
 
 #include <arduino.h>
+#include <Sensors/read.h>
 
 template<class T>
 class SensorABS {
