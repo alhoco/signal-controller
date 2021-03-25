@@ -28,10 +28,12 @@ setpoint_signal.execute();
 if (sensor.hasChanged()){
   int raw_read = sensor.getValue().getValue();
   circularbuffer.append(raw_read);
-  int temperature = circularbuffer.mean();
+  float temperature = circularbuffer.mean();
+  
+  float processed_signal = transform<float>(temperature, 50, 1023);
 }
 
-  float processed_signal = OffsetTransformer::transform(temperature);
+
   
   output::Output(processed_signal, setpoint_signal.getValue().getValue());
   int aggregated_signal = Aggregator::aggregator();
