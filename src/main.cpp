@@ -5,6 +5,7 @@
 #include <processors/aggregator.h>
 #include <Output/Alarm.h>
 #include <Sensors/analog_sensor.h>
+#include <processors/CircularBuffer.h>
 
 CircularBuffer<int> circularbuffer = CircularBuffer<int>(6);
 analogsensor sensor = analogsensor(0x7E, A0);
