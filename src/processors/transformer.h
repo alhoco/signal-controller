@@ -4,8 +4,8 @@
 #include <Arduino.h>
 
 template<class T>
-T transform(T input, T max, T min){
-    return (input * max) / min;
+T transform(T input, T max_temperature, T max_sensor){
+    return (input * max_temperature) / max_sensor;
 }
 
 #endif
