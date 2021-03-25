@@ -31,11 +31,8 @@ if (sensor.hasChanged()){
   float temperature = circularbuffer.mean();
   
   float processed_signal = transform<float>(temperature, 50, 1023);
-}
 
-
-  
-  output::Output(processed_signal, setpoint_signal.getValue().getValue());
+    output::Output(processed_signal, setpoint_signal.getValue().getValue());
   int aggregated_signal = Aggregator::aggregator();
   Alarm::alarm(aggregated_signal);
 
@@ -46,5 +43,6 @@ if (sensor.hasChanged()){
   Serial.println(output::compressor_state);
   Serial.print("Encendidos continuos compresor: ");
   Serial.println(Aggregator::compressor_start_counter);
+}
   
 }
