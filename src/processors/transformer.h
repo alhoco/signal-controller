@@ -1,13 +1,11 @@
 #ifndef TRANSFORMER_H
 #define TRANSFORMER_H
 
-namespace OffsetTransformer {
-    float max_bin = 1023;
-    float max_temp = 50;
+#include <Arduino.h>
 
-    float transform(float input) {
-        return (input * max_temp) / max_bin;
-    }
+template<class T>
+T transform(T input, T max_temperature, T max_sensor){
+    return (input * max_temperature) / max_sensor;
 }
 
 #endif
