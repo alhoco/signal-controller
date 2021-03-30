@@ -46,7 +46,9 @@ void SensorABS<T>::execute(){
     if (new_value != this->raw_value){
         this->raw_value = new_value;
         this->value = Read<T>(new_value, this->id);
+        this->changed = true;
     }
+
 }
 
 
