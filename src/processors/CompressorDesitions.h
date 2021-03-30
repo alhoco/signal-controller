@@ -8,14 +8,14 @@ AmperageSensor Amp_Sensor = AmperageSensor(0x7E, A2);
 
 template<class T>
 T CompressorDesitions(uint8_t input_signal, uint8_t setpoint){
-
+    bool order;
      if (input_signal >= setpoint){
-        this->order = true; 
+        order = true; 
     }
     else {
-        this->order = false;
+        order = false;
     }
-    return bool(this->order);
+    return order;
     delay(3000);
 
     //Amp_Sensor.execute();
