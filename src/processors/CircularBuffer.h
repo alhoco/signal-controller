@@ -19,7 +19,7 @@ private:
 
 template<class T>
 CircularBuffer<T>::CircularBuffer(int s){
-    this->size = s
+    this->size = s;
     buffer = new T[size];
 }
 
@@ -34,10 +34,10 @@ void CircularBuffer<T>::append(T value){
 template<class T>
 float CircularBuffer<T>::mean(){
     T sum = 0;
-    for (i = 0; i < this->size; i++){
-        sum += this->buffer[i];
-    }
-    return float sum / size;
+    for (int j= 0; j < this->size; j++){
+        sum += this->buffer[j];
+    };
+    return float(sum) / this->size;
 }
 
 #endif
