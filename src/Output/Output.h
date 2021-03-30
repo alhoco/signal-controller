@@ -9,9 +9,9 @@
 
 AnalogSensor Amp_Sensor = AnalogSensor(0x7E, A2);
 
-void setup() {
-    pinMode(Compressor, LOW);
-}
+//void setup() {
+//    pinMode(Compressor, LOW);
+//}
 
 namespace output{
     int compressor_state = 0;
