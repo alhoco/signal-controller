@@ -1,5 +1,5 @@
 #ifndef ANALOG_SENSOR_H
-#define aNALOG_SENSOR_H
+#define ANALOG_SENSOR_H
 
 #include <Arduino.h>
 #include <Sensors/sensor.h>
