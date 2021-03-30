@@ -1,56 +1,40 @@
 #ifndef OUTPUT_H
 #define OUTPUT_H
-#define Compressor 2
-#define Amperage A1
 
 #include <arduino.h>
-#include <Sensors/analog_sensor.h>
-#include <Sensors/sensor_amperaje.h>
 #include <settings.h>
 
-AmperageSensor Amp_Sensor = AmperageSensor(0x7E, A2);
-
-//void setup() {
-//    pinMode(Compressor, LOW);
-//}
 
 namespace output{
-    int compressor_state = 0;
-    int last_compressor_state = 0;
-
+/*
 template<class T>
-class Outputrole{
-public:
-    void Output(uint8_t input_signal, uint8_t setpoint);
-private:
-    uint8_t last_compressor_state;
-    uint8_t compressor_state;
+class output {
+    public:
+        bool getState();
+        void Order(int source, bool order);
+    private:
+        bool compressor_state;
+        bool order;
 };
 
 template<class T>
-void Outputrole<T>::Output(uint8_t input_signal, uint8_t setpoint){
-        // Aqui voy
+bool output<T>::getState(){
+    return this->compressor_state;
+}
 
-     if (input_signal >= setpoint){
-        digitalWrite(Compressor, HIGH);
-        compressor_state = 1;
+template<class T>*/
+
+bool compressor_state;
+
+void Order(int source, bool order){
+    if (order){
+        digitalWrite(source,HIGH);
+        compressor_state = true;
     }
     else {
-        digitalWrite(Compressor, LOW);
-        compressor_state = 0;
+        digitalWrite(source,LOW);
+        compressor_state = false;
     }
-    delay(3000);
-
-    Amp_Sensor.execute();
-
-    if (Amp_Sensor.getValue().getValue() < 0){
-        last_compressor_state = compressor_state;
-        compressor_state = 0;
-    }
-    else {
-        last_compressor_state = compressor_state;
-    }
-        
 }
 }
 
