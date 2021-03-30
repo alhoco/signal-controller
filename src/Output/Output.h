@@ -5,9 +5,10 @@
 
 #include <arduino.h>
 #include <Sensors/analog_sensor.h>
+#include <Sensors/sensor_amperaje.h>
 #include <settings.h>
 
-AnalogSensor Amp_Sensor = AnalogSensor(0x7E, A2);
+AmperageSensor Amp_Sensor = AmperageSensor(0x7E, A2);
 
 //void setup() {
 //    pinMode(Compressor, LOW);
