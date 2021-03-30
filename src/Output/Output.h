@@ -6,13 +6,34 @@
 
 
 namespace output{
+/*
+template<class T>
+class output {
+    public:
+        bool getState();
+        void Order(int source, bool order);
+    private:
+        bool compressor_state;
+        bool order;
+};
 
-void Output(bool order){
-    if (order == true){
-    digitalWrite(Settings::COMPRESSOR,HIGH);
+template<class T>
+bool output<T>::getState(){
+    return this->compressor_state;
+}
+
+template<class T>*/
+
+bool compressor_state;
+
+void Order(int source, bool order){
+    if (order){
+        digitalWrite(source,HIGH);
+        compressor_state = true;
     }
     else {
-        digitalWrite(Settings::COMPRESSOR,LOW);
+        digitalWrite(source,LOW);
+        compressor_state = false;
     }
 }
 }
