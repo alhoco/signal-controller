@@ -7,9 +7,9 @@
 AmperageSensor Amp_Sensor = AmperageSensor(0x7E, A2);
 
 template<class T>
-class Outputrole{
+class CompressorDesition{
 public:
-    void Output(uint8_t input_signal, uint8_t setpoint);
+    void CompressorDesitions(uint8_t input_signal, uint8_t setpoint);
     bool CompressorState();
     bool getOrder();
 private:
@@ -19,17 +19,17 @@ private:
 };
 
 template<class T>
-bool Outputrole<T>::CompressorState(){
+bool CompressorDesition<T>::CompressorState(){
     return this->compressor_state;
 };
 
 template<class T>
-bool Outputrole<T>::getOrder(){
+bool CompressorDesition<T>::getOrder(){
     return this->order;
 }
 
 template<class T>
-void Outputrole<T>::Output(uint8_t input_signal, uint8_t setpoint){
+void CompressorDesition<T>::CompressorDesitions(uint8_t input_signal, uint8_t setpoint){
 
      if (input_signal >= setpoint){
         this->order = true; 
