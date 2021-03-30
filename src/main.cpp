@@ -25,6 +25,7 @@ void loop() {
 
 sensor.execute();
 setpoint_signal.execute();
+Amp_Sensor.execute();
 
 if (sensor.hasChanged()){
   int raw_read = sensor.getValue().getValue();
@@ -42,6 +43,10 @@ if (sensor.hasChanged()){
   Serial.println(raw_read);
   Serial.print("Temperatura media: ");
   Serial.println(temperature);
+  Serial.print("Temperatura setpoint: ");
+  Serial.println(setpoint_signal.getValue().getValue());
+  Serial.print("Temperatura setpoint: ");
+  Serial.println(Amp_Sensor.getValue().getValue());
   //Serial.print("Encendidos continuos compresor: ");
   //Serial.println(Aggregator::compressor_start_counter);
 }
