@@ -13,10 +13,10 @@ class SensorABS {
             bool hasChanged();
             void execute();   
         private:
-            T last_value;
+            T raw_value;
             Read<T> value;
             uint8_t id;
-            virtual T Read();
+            virtual T read();
             bool changed;
 };
 
