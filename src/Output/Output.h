@@ -30,7 +30,7 @@ template<class T>
 void Outputrole<T>::Output(uint8_t input_signal, uint8_t setpoint){
         // Aqui voy
 
-     if (input >= setpoint){
+     if (input_signal >= setpoint){
         digitalWrite(Compressor, HIGH);
         compressor_state = 1;
     }
@@ -40,10 +40,9 @@ void Outputrole<T>::Output(uint8_t input_signal, uint8_t setpoint){
     }
     delay(3000);
 
-    ampsensor.execute();
-    circularbufferamp.append(ampsensor);
+    Amp_Sensor.execute();
 
-    if (ampsensor.getValue().getValue() < 0){
+    if (Amp_Sensor.getValue().getValue() < 0){
         last_compressor_state = compressor_state;
         compressor_state = 0;
     }
