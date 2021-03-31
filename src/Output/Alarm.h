@@ -1,22 +1,23 @@
 #ifndef ALARM_H
 #define ALARM_H
-#define Led 3
-#include <Arduino.h>
 
-void setup (){
-    pinMode(Led,OUTPUT);
-    digitalWrite(Led,LOW);
-}
+#include <Arduino.h>
+#include <Sensors/sensor_amperaje.h>
+#include <Output/Output.h>
+
 
 namespace Alarm{
 
-    void alarm(int input_signal){
+    bool Alarm_state;
+    void alarm(int source, int input_signal){
 
-        if (input_signal >= 3){
-            digitalWrite(Led, HIGH);
+        if (input_signal >= 10 && (output::compressor_state == true)){
+            digitalWrite(source, HIGH);
+            Alarm_state = true;
         }
         else{
-            digitalWrite(Led, LOW);
+            digitalWrite(source, LOW);
+            Alarm_state = false;
         }
     }
 }

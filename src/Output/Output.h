@@ -3,6 +3,7 @@
 
 #include <arduino.h>
 #include <settings.h>
+//#include <Output/Alarm.h>
 
 
 namespace output{
@@ -27,7 +28,7 @@ template<class T>*/
 bool compressor_state;
 
 void Order(int source, bool order){
-    if (order){
+    if ((order == true)){
         digitalWrite(source,HIGH);
         compressor_state = true;
     }
