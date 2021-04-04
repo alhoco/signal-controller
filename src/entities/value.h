@@ -1,13 +1,13 @@
-#ifndef READ_H
-#define READ_H
+#ifndef VALUE_H
+#define VALUE_H
 
 #include <Arduino.h>
 
 template<class T>
-class Read {
+class ValueABS {
     public:
-        Read();
-        Read(T value, uint8_t source);
+        ValueABS();
+        ValueABS(T value, uint8_t source);
         uint8_t getSource();
         T getValue();
     private: 
@@ -16,21 +16,21 @@ class Read {
 };
 
 template<class T>
-Read<T>::Read(T value, uint8_t source) {
+ValueABS<T>::ValueABS(T value, uint8_t source) {
     this->value = value;
     this->source = source;
 }
 
 template<class T> 
-Read<T>::Read() {};
+ValueABS<T>::ValueABS() {};
 
 template<class T>
-T Read<T>::getValue(){
+T ValueABS<T>::getValue(){
     return this->value;
 }
 
 template<class T>
-uint8_t Read<T>::getSource() {
+uint8_t ValueABS<T>::getSource() {
     return this->source;
 }
 
