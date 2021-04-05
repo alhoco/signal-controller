@@ -1,11 +1,11 @@
 #ifndef ACTUATORS_H
 #define ACTUATORS_H
 
-#include <arduino.h>
-#include <entities/value.h>
+#include <Arduino.h>
+#include <entities/Value.h>
 
 template<class T>
-class SensorABS {
+class ActuatorABS {
         public: 
             ActuatorABS(uint8_t id);
             void setValue(ValueABS<T> value);
@@ -15,6 +15,7 @@ class SensorABS {
         private:
             bool hasToChange;
             ValueABS<T> value;
+            uint8_t id;
             virtual void write(ValueABS<T> value);
 };
 
