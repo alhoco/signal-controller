@@ -8,6 +8,14 @@ class Temperature : public ValueABS<float> {
     public:
         Temperature():ValueABS(){};
         Temperature(float value, uint8_t source):ValueABS(value,source){};
+        float getValue();
+    private:
+        float value;
+
 };
+
+float Temperature::getValue(){
+    return this->value;
+}
 
 #endif
