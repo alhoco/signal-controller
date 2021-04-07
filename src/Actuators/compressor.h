@@ -3,11 +3,11 @@
 
 #include <Arduino.h>
 #include <Actuators/Actuators.h>
-#include <entities/signal.h>
+#include <entities/Signal.h>
 
-class Compressor : public ActuatorABS<Signal> {
+class Compressor : public ActuatorABS<float> {
     public:
-        Compressor(uint8_t id, uint8_t pin):ActuatorABS(id){
+        Compressor(uint8_t id, uint8_t pin):ActuatorABS<float>(id){
             this->pin = pin;
         }
     private:
@@ -16,8 +16,8 @@ class Compressor : public ActuatorABS<Signal> {
 };
 
 void Compressor::write(Signal value){
-    uint_8t discrete_value = map(value.getValue(), 0, 1, 0, 255);   // Revisar voltaje/ampreaje de entrada
-    analogWrite(this->pin, descrete_value);
+    uint8_t discrete_value = map(value.getValue(), 0, 1, 0, 255);   // Revisar voltaje/ampreaje de entrada
+    analogWrite(this->pin, discrete_value);
 }
 
 #endif
