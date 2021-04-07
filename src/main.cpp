@@ -8,6 +8,10 @@
 #include <processors/CircularBuffer.h>
 #include <Sensors/sensor_temperatura.h>
 #include <processors/CompressorDesitions.h>
+#include <entities/Signal.h>
+#include <entities/Temperature.h>
+#include <entities/Signal.h>
+
 
 CircularBuffer<int> circularbuffer = CircularBuffer<int>(6);
 TemperatureSensor sensor = TemperatureSensor(0x7E, A0);
@@ -35,8 +39,10 @@ void loop() {
   Amp_sensor.execute();
 
   if (sensor.hasChanged()){
-    int raw_read = sensor.getValue().getValue();
-    circularbuffer.append(raw_read);
+    ValueABS<float> raw_read = sensor.getValue();
+    
+    //float raw_read = sensor.getValue().getValue();
+    circularbuffer.append(raw_read.getValue());
     float temperature = circularbuffer.mean();
   
     bool order = CompressorDesitions<bool>(temperature, setpoint_signal.getValue().getValue());
@@ -51,7 +57,7 @@ void loop() {
 
     Serial.println("--------------- Muestreo de Variables ---------------");
     Serial.print("Temperatura: ");
-    Serial.println(raw_read);
+    Serial.println(raw_read.getValue());
     Serial.print("Temperatura media: ");
     Serial.println(temperature);
     Serial.print("Temperatura setpoint: ");
@@ -61,6 +67,6 @@ void loop() {
     //Serial.print("Encendidos continuos compresor: ");
   //Serial.println(Aggregator::compressor_start_counter);
 } 
-delay(3000);
+delay(1000);
   
 }
