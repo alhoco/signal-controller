@@ -25,7 +25,6 @@ AmperageSensor Amp_sensor = AmperageSensor(0x7B, A2);
 Led compressor = Led(0xAB, 22);
 Led Alarm_Led = Led(0xAC, 30);
 
-bool Old_Alarm = false;
 
 void setup() {
   // put your setup code here, to run once:
@@ -55,12 +54,13 @@ void loop() {
 
     Temperature Temperature_setpoint = Temperature(Temp_setpoint.getValue(), 0);
     Temperature Temp = Temperature(temperature, 0);
-    bool Compressor_Instruction = desitions(Temp, Temperature_setpoint);
-    bool Compressor_Valid = Compressor_Validation(Old_Alarm, Compressor_Instruction); 
-
-    State Compressor_State = State(Compressor_Valid, 0);
     Amperage Compressor_Amperage = Amperage(amperage.getValue(), 0);
     Amperage Amperage_Setpoint = Amperage(12, 0);
+    
+    bool Compressor_Instruction = desitions(Temp, Temperature_setpoint);
+    bool Compressor_Valid = Compressor_Validation(Compressor_Amperage, Amperage_Setpoint, Compressor_Instruction); 
+    State Compressor_State = State(Compressor_Valid, 0);
+    
 
     //Accionamiento del compresor por ahora como un LED hasta implementar PID
     compressor.setValue(Compressor_State);
@@ -69,8 +69,6 @@ void loop() {
     //Alarma
     bool Alarm_Instruction = desitions(Compressor_Amperage, Amperage_Setpoint);
     State Alarm_State = State(Alarm_Instruction, 0);
-
-    Old_Alarm = Alarm_State.getValue();
     
     Alarm_Led.setValue(Alarm_State);
     Alarm_Led.execute();
