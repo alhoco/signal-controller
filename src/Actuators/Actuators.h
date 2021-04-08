@@ -2,21 +2,21 @@
 #define ACTUATORS_H
 
 #include <Arduino.h>
-#include <entities/Value.h>
+#include <entities/value.h>
 
 template<class T>
 class ActuatorABS {
         public: 
             ActuatorABS(uint8_t id);
-            void setValue(ValueABS<T> value);
+            void setValue(T value);
             ValueABS<T> getValue();
             uint8_t getId();
             void execute();   
         private:
             bool hasToChange;
-            ValueABS<T> value;
+            T value;
             uint8_t id;
-            virtual void write(ValueABS<T> value);
+            virtual void write(T value);
 };
 
 template<class T>
@@ -25,7 +25,7 @@ ActuatorABS<T>::ActuatorABS(uint8_t id){
 };
 
 template<class T>
-void ActuatorABS<T>::setValue(ValueABS<T> value){
+void ActuatorABS<T>::setValue(T value){
     this->value = value;
     this->hasToChange = true;
 };
@@ -38,7 +38,7 @@ uint8_t ActuatorABS<T>::getId(){
 template<class T>
 void ActuatorABS<T>::execute(){
     if(this->hasToChange){
-        this->write(this->Value);
+        this->write(this->value);
         this->hasToChange = false;
     }
 };
