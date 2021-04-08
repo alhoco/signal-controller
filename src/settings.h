@@ -3,9 +3,9 @@
 
 namespace Settings {
     const String VERSION = "0.0.0";
-    const int COMPRESSOR = 22;
-    const uint8_t setpoint = A1;
-    const int ALARM_LED = 30;
+    const int compressor = 22;
+    const uint8_t setpoint_Temperature = A1;
+    const int Alarm_Led = 30;
     const uint8_t sensor = A0;
     const uint8_t Amp_Sensor = A2;
 }
