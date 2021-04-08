@@ -3,14 +3,16 @@
 
 #include <Arduino.h>
 
-bool Compressor_Validation(bool Alarm_value){
+bool Compressor_Validation(bool Alarm_value, bool Compressor_Instruction){
     bool validation = false;
 
     if(Alarm_value){
        validation = false;  
     }
     else{
-        validation = true;
+        if(Compressor_Instruction){
+            validation = true;
+        }
     }
     return validation;
 }
