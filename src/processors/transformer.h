@@ -10,16 +10,17 @@ T transform(T input, T max_temperature, T max_sensor){
 }
 
 template<class T>
-bool desitions(T value, T setPoint){
+bool desitions(T value, T reference){
     bool desition;
     
-    if (value > setPoint){
+    if (value.getValue() > reference.getValue()){
         desition = true;
     }
     else{
         desition = false;
     }
-    return desition; 
+    return bool(desition); 
 }
+
 
 #endif
