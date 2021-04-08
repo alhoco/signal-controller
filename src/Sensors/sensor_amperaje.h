@@ -6,7 +6,7 @@
 
 class AmperageSensor : public AnalogSensor {
     public:
-        AmperageSensor(uint8_t id, uint8_t pin):AnalogSensor(id, pin, 0.01466){}
+        AmperageSensor(uint8_t id, uint8_t pin):AnalogSensor(id, pin, 0.01467){}
 };
 
 #endif 

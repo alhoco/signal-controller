@@ -2,11 +2,12 @@
 #define VALIDATORS_H
 
 #include <Arduino.h>
+#include <entities/Amperage.h>
 
-bool Compressor_Validation(bool Alarm_value, bool Compressor_Instruction){
+bool Compressor_Validation(Amperage Amp, Amperage Amperage_Setpoint, bool Compressor_Instruction){
     bool validation = false;
 
-    if(Alarm_value){
+    if(Amp.getValue() >= Amperage_Setpoint.getValue()){
        validation = false;  
     }
     else{
