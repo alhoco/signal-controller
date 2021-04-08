@@ -69,10 +69,11 @@ void loop() {
     Alarm_Led.execute();
 
     valuePrinter(Serial, raw_read.getValue(), "Raw Temperature");
-    valuePrinter(Serial, temperature, "Mean Temperature");
-    valuePrinter(Serial, Temp_setpoint.getValue(), "Set point");
-    valuePrinter(Serial, amperage.getValue(), "Compressor Ampreage");
-    StatePrinter(Serial, Compressor_State.getValue(), "Compressor State");
+    valuePrinter(Serial, Temp.getValue(), "Mean Temperature");
+    valuePrinter(Serial, Temperature_setpoint.getValue(), "Set point");
+    valuePrinter(Serial, Compressor_Amperage.getValue(), "Compressor Ampreage");
+    StatePrinter(Serial, Compressor_Instruction, "Compressor State");
+    StatePrinter(Serial, Alarm_Instruction, "Alarm State");
     Serial.println("");
 } 
 delay(1000);
