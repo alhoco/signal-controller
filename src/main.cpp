@@ -1,66 +1,88 @@
 #include <Arduino.h>
 #include <settings.h>
 #include <processors/transformer.h>
-#include <Output/Output.h>
+//#include <Output/Output.h>
 //#include <processors/aggregator.h>
-#include <Output/Alarm.h>
+//#include <Output/Alarm.h>
 #include <Sensors/analog_sensor.h>
 #include <processors/CircularBuffer.h>
 #include <Sensors/sensor_temperatura.h>
-#include <processors/CompressorDesitions.h>
+#include <Sensors/sensor_amperaje.h>
+#include <entities/Signal.h>
+#include <entities/Temperature.h>
+#include <entities/Signal.h>
+#include <entities/State.h>
+#include <Actuators/Led.h>
+#include <Serializers/Printer.h>
+#include <entities/Amperage.h>
+#include <processors/Validators.h>
+
 
 CircularBuffer<int> circularbuffer = CircularBuffer<int>(6);
 TemperatureSensor sensor = TemperatureSensor(0x7E, A0);
-TemperatureSensor setpoint_signal = TemperatureSensor(0x7E, A1);
-AmperageSensor Amp_sensor = AmperageSensor(0x7E,A2);
+TemperatureSensor setpoint_Temperature = TemperatureSensor(0x7A, A1);
+AmperageSensor Amp_sensor = AmperageSensor(0x7B, A2);
+Led compressor = Led(0xAB, 22);
+Led Alarm_Led = Led(0xAC, 30);
 
-int compressor = Settings::COMPRESSOR;
+bool Old_Alarm = false;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   pinMode(Settings::sensor,INPUT);
-  pinMode(Settings::setpoint,INPUT);
+  pinMode(Settings::setpoint_Temperature,INPUT);
   pinMode(Settings::Amp_Sensor,INPUT);
-  pinMode(Settings::COMPRESSOR,OUTPUT);
-  pinMode(Settings::ALARM_LED,OUTPUT);
+  pinMode(Settings::compressor,OUTPUT);
+  pinMode(Settings::Alarm_Led,OUTPUT);
 
-  digitalWrite(Settings::COMPRESSOR,LOW);
+  digitalWrite(Settings::compressor,LOW);
 }
 
 void loop() {
 
   sensor.execute();
-  setpoint_signal.execute();
+  setpoint_Temperature.execute();
   Amp_sensor.execute();
 
   if (sensor.hasChanged()){
-    int raw_read = sensor.getValue().getValue();
-    circularbuffer.append(raw_read);
+    ValueABS<float> raw_read = sensor.getValue();
+    ValueABS<float> Temp_setpoint = setpoint_Temperature.getValue();
+    ValueABS<float> amperage = Amp_sensor.getValue();
+
+    circularbuffer.append(raw_read.getValue());
     float temperature = circularbuffer.mean();
-  
-    bool order = CompressorDesitions<bool>(temperature, setpoint_signal.getValue().getValue());
-    output::Order(compressor, order);
 
-    Alarm::alarm(Settings::ALARM_LED, Amp_sensor.getValue().getValue());
-    //float processed_signal = transform<float>(temperature, 50, 1023);
+    Temperature Temperature_setpoint = Temperature(Temp_setpoint.getValue(), 0);
+    Temperature Temp = Temperature(temperature, 0);
+    bool Compressor_Instruction = desitions(Temp, Temperature_setpoint);
+    bool Compressor_Valid = Compressor_Validation(Old_Alarm, Compressor_Instruction); 
 
-    //output::Output(processed_signal, setpoint_signal.getValue().getValue());
-    //int aggregated_signal = Aggregator::aggregator();
-    //Alarm::alarm(aggregated_signal);
+    State Compressor_State = State(Compressor_Valid, 0);
+    Amperage Compressor_Amperage = Amperage(amperage.getValue(), 0);
+    Amperage Amperage_Setpoint = Amperage(12, 0);
 
-    Serial.println("--------------- Muestreo de Variables ---------------");
-    Serial.print("Temperatura: ");
-    Serial.println(raw_read);
-    Serial.print("Temperatura media: ");
-    Serial.println(temperature);
-    Serial.print("Temperatura setpoint: ");
-    Serial.println(setpoint_signal.getValue().getValue());
-    Serial.print("Amperaje: ");
-    Serial.println(Amp_sensor.getValue().getValue());
-    //Serial.print("Encendidos continuos compresor: ");
-  //Serial.println(Aggregator::compressor_start_counter);
+    //Accionamiento del compresor por ahora como un LED hasta implementar PID
+    compressor.setValue(Compressor_State);
+    compressor.execute();
+    
+    //Alarma
+    bool Alarm_Instruction = desitions(Compressor_Amperage, Amperage_Setpoint);
+    State Alarm_State = State(Alarm_Instruction, 0);
+
+    Old_Alarm = Alarm_State.getValue();
+    
+    Alarm_Led.setValue(Alarm_State);
+    Alarm_Led.execute();
+
+    valuePrinter(Serial, raw_read.getValue(), "Raw Temperature");
+    valuePrinter(Serial, Temp.getValue(), "Mean Temperature");
+    valuePrinter(Serial, Temperature_setpoint.getValue(), "Set point");
+    valuePrinter(Serial, Compressor_Amperage.getValue(), "Compressor Ampreage");
+    StatePrinter(Serial, Compressor_Valid, "Compressor State");
+    StatePrinter(Serial, Alarm_Instruction, "Alarm State");
+    Serial.println("");
 } 
-delay(3000);
+delay(1000);
   
 }
