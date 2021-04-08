@@ -15,6 +15,7 @@
 #include <Actuators/Led.h>
 #include <Serializers/Printer.h>
 #include <entities/Amperage.h>
+#include <processors/Validators.h>
 
 
 CircularBuffer<int> circularbuffer = CircularBuffer<int>(6);
@@ -23,6 +24,8 @@ TemperatureSensor setpoint_Temperature = TemperatureSensor(0x7A, A1);
 AmperageSensor Amp_sensor = AmperageSensor(0x7B, A2);
 Led compressor = Led(0xAB, 22);
 Led Alarm_Led = Led(0xAC, 30);
+
+bool Old_Alarm = false;
 
 void setup() {
   // put your setup code here, to run once:
@@ -53,7 +56,9 @@ void loop() {
     Temperature Temperature_setpoint = Temperature(Temp_setpoint.getValue(), 0);
     Temperature Temp = Temperature(temperature, 0);
     bool Compressor_Instruction = desitions(Temp, Temperature_setpoint);
-    State Compressor_State = State(Compressor_Instruction, 0);
+    bool Compressor_Valid = Compressor_Validation(Old_Alarm, Compressor_Instruction); 
+
+    State Compressor_State = State(Compressor_Valid, 0);
     Amperage Compressor_Amperage = Amperage(amperage.getValue(), 0);
     Amperage Amperage_Setpoint = Amperage(12, 0);
 
@@ -64,6 +69,8 @@ void loop() {
     //Alarma
     bool Alarm_Instruction = desitions(Compressor_Amperage, Amperage_Setpoint);
     State Alarm_State = State(Alarm_Instruction, 0);
+
+    Old_Alarm = Alarm_State.getValue();
     
     Alarm_Led.setValue(Alarm_State);
     Alarm_Led.execute();
@@ -72,7 +79,7 @@ void loop() {
     valuePrinter(Serial, Temp.getValue(), "Mean Temperature");
     valuePrinter(Serial, Temperature_setpoint.getValue(), "Set point");
     valuePrinter(Serial, Compressor_Amperage.getValue(), "Compressor Ampreage");
-    StatePrinter(Serial, Compressor_Instruction, "Compressor State");
+    StatePrinter(Serial, Compressor_Valid, "Compressor State");
     StatePrinter(Serial, Alarm_Instruction, "Alarm State");
     Serial.println("");
 } 
