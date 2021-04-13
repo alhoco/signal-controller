@@ -3,12 +3,12 @@
 
 #include <Arduino.h>
 #include <Actuators/Actuators.h>
-#include <entities/Temperature.h>
+//#include <entities/Temperature.h>
 #include <processors/transformer.h>
 #include <Actuators/LedRGB.h>
 #include <entities/Signal.h>
 
-class Compressor : public ActuatorABS<Temperature> {
+class Compressor : public ActuatorABS<Signal> {
     public:
         Compressor(uint8_t id, uint8_t pinR, uint8_t pinG, uint8_t pinB):ActuatorABS(id){
             this->pinR = pinR;
@@ -19,10 +19,10 @@ class Compressor : public ActuatorABS<Temperature> {
         uint8_t pinR;
         uint8_t pinG;
         uint8_t pinB;
-        void write(Temperature value);
+        void write(Signal value);
 };
 
-void Compressor::write(Temperature value){
+void Compressor::write(Signal value){
     uint8_t discrete_value = map(value.getValue(), 0, 15, 0, 255);   // Revisar voltaje/ampreaje de entrada
     Signal Output_value = Signal(discrete_value, 0);
     //analogWrite(this->pin, discrete_value);
@@ -30,6 +30,7 @@ void Compressor::write(Temperature value){
     LedRGB State = LedRGB(0xAC, this->pinR, this->pinG, this->pinB);
 
     State.setValue(Output_value);
+    State.execute();
 }
 
 #endif
