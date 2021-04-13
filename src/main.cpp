@@ -29,7 +29,7 @@ Led compressor_led = Led(0xAB, 53);
 Compressor compressor = Compressor(0xAD, 4, 2, 3);
 Led Alarm_Led = Led(0xAC, 51);
 double reference_Time = 0;
-int Time = 1000;
+int Time = 500;
 
 
 void setup() {
@@ -91,13 +91,13 @@ void loop() {
     Alarm_Led.execute();
 
     
-
+   /* 
     if(reference_Time == 0){
       reference_Time = millis();
     }
 
     double current_Time = millis();
-
+    
     if ((current_Time - reference_Time) >= Time){
     valuePrinter(Serial, raw_read.getValue(), "Raw Temperature");
     valuePrinter(Serial, signal.getValue(), "PWM");
@@ -107,9 +107,28 @@ void loop() {
     StatePrinter(Serial, Compressor_Valid, "Compressor State");
     StatePrinter(Serial, Alarm_Instruction, "Alarm State");
     Serial.println("");
+    
     reference_Time = 0;
-    }
-} 
+    }*/
 
-  
-}
+    if(reference_Time == 0){
+            reference_Time = millis();
+        }
+
+        double current_Time = millis();
+    
+        if ((current_Time - reference_Time) >= Time){
+            valuePrinter(Serial, PIDenvironment::currentTime, "Tiempo Actual");
+            valuePrinter(Serial, PIDenvironment::PreviousTime, "Tiempo pasado");
+            valuePrinter(Serial, PIDenvironment::ElapsedTime, "Tiempo transcurrido");
+            valuePrinter(Serial, PIDenvironment::Error, "Error");
+            valuePrinter(Serial, PIDenvironment::SumError, "Suma error");
+            valuePrinter(Serial, PIDenvironment::ErrorDif, "Derivada Error");
+            valuePrinter(Serial, PIDenvironment::Signal, "señal retornada");
+            Serial.println("");
+    
+             reference_Time = 0;
+        }
+  } 
+  //delay(1000);
+  }

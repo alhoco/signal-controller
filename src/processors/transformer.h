@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include <entities/value.h>
 #include <stdlib.h>
+#include <Serializers/Printer.h>
+
 
 template<class T>
 T transform(T input, T max_temperature, T max_sensor){
@@ -35,21 +37,23 @@ namespace PIDenvironment {
     float currentTime;
     float ElapsedTime;
     float PreviousTime;
-    
+    float Signal;
+
     template<class T>
     float PID(T value, T Reference){
         currentTime = millis();
         ElapsedTime = currentTime - PreviousTime;
 
 
-        Error = Reference.getValue() - value.getValue();
+        Error = value.getValue() - Reference.getValue();
         SumError = SumError + (Error * ElapsedTime);
         ErrorDif = (Error - oldError) / ElapsedTime;
         oldError = Error;
         
-        return (Kp * Error) + (Ki * SumError) + (Kd * ErrorDif); 
-
+        Signal = (Kp * Error) + (Ki * SumError) + (Kd * ErrorDif);
         PreviousTime = currentTime;
+
+        return Signal; 
     }
 }
 #endif
