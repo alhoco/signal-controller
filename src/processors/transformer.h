@@ -42,7 +42,7 @@ namespace PIDenvironment {
         ElapsedTime = currentTime - PreviousTime;
 
 
-        Error = abs(Reference.getValue() - value.getValue());
+        Error = Reference.getValue() - value.getValue();
         SumError = SumError + (Error * ElapsedTime);
         ErrorDif = (Error - oldError) / ElapsedTime;
         oldError = Error;
