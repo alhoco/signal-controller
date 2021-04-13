@@ -42,7 +42,7 @@ int RGBDirection(bool CompressorDirection, bool Validation){
         }
     }
     else{
-        Direction = 0;
+        Direction = 3;
     }
     return Direction;
 }

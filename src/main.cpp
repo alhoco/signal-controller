@@ -24,9 +24,9 @@ CircularBuffer<int> circularbuffer = CircularBuffer<int>(6);
 TemperatureSensor sensor = TemperatureSensor(0x7E, A0);
 TemperatureSensor setpoint_Temperature = TemperatureSensor(0x7A, A1);
 AmperageSensor Amp_sensor = AmperageSensor(0x7B, A2);
-Led compressor = Led(0xAB, 22);
+Led compressor = Led(0xAB, 53);
 LedRGB comp_RGB = LedRGB(0xAC, 4, 2, 3);
-Led Alarm_Led = Led(0xAC, 30);
+Led Alarm_Led = Led(0xAC, 51);
 
 
 void setup() {

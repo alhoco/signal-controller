@@ -34,7 +34,7 @@ void LedRGB::write(Direction value){
         G = 0;
         B = 0;
     }
-    if(value.getValue() == 0){
+    if(value.getValue() == 3){
         R = 0;
         G = 0;
         B = 0;
