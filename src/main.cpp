@@ -18,14 +18,15 @@
 #include <processors/Validators.h>
 #include <entities/Direction.h>
 #include <Actuators/LedRGB.h>
+#include <Actuators/compressor.h>
 
 
 CircularBuffer<int> circularbuffer = CircularBuffer<int>(6);
 TemperatureSensor sensor = TemperatureSensor(0x7E, A0);
 TemperatureSensor setpoint_Temperature = TemperatureSensor(0x7A, A1);
 AmperageSensor Amp_sensor = AmperageSensor(0x7B, A2);
-Led compressor = Led(0xAB, 22);
-LedRGB comp_RGB = LedRGB(0xAC, 4, 2, 3);
+Led compressor_led = Led(0xAB, 22);
+Compressor compressor = Compressor(0xAD, 4, 2, 3);
 Led Alarm_Led = Led(0xAC, 30);
 
 
@@ -68,10 +69,10 @@ void loop() {
     
 
     //Accionamiento del compresor por ahora como un LED hasta implementar PID
-    compressor.setValue(Compressor_State);
-    compressor.execute();
-    comp_RGB.setValue(RGBDir);
-    comp_RGB.execute();
+    compressor_led.setValue(Compressor_State);
+    compressor_led.execute();
+    //comp_RGB.setValue(RGBDir);
+    //comp_RGB.execute();
     
     //Alarma
     bool Alarm_Instruction = desitions(Compressor_Amperage, Amperage_Setpoint);

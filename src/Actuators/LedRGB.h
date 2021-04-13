@@ -5,7 +5,7 @@
 #include <Actuators/Actuators.h>
 #include <entities/Direction.h>
 
-class LedRGB : public ActuatorABS<Direction> {
+class LedRGB : public ActuatorABS<Signal> {
     public:
         LedRGB(uint8_t id, uint8_t pinR, uint8_t pinG, uint8_t pinB):ActuatorABS(id){
             this->pinR = pinR;
@@ -16,29 +16,13 @@ class LedRGB : public ActuatorABS<Direction> {
         uint8_t pinR;
         uint8_t pinG;
         uint8_t pinB;
-        void write(Direction value);
+        void write(Signal value);
 };
 
-void LedRGB::write(Direction value){
+void LedRGB::write(Signal value){
     float R = 0;
-    float G = 0;
+    float G = value.getValue();
     float B = 0;
-    
-    if (value.getValue() == 1){
-        R = 0;
-        G = 255;
-        B = 0;
-    }
-    if(value.getValue() == 2){
-        R = 255;
-        G = 0;
-        B = 0;
-    }
-    if(value.getValue() == 0){
-        R = 0;
-        G = 0;
-        B = 0;
-    }
 
     if(value.getValue() != 0){
         analogWrite(this->pinR, R);

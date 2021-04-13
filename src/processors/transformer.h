@@ -26,22 +26,30 @@ bool desitions(T value, T reference){
 
 namespace PIDenvironment {
     float oldError = 0;
-    float dT = 1;    //Revisar (Aqui esta con FPS)
     float Kp = 10;
     float Ki = 2;
-    float Kd = 0.1;
+    float Kd = 0.5;
     float Error;
     float SumError;
     float ErrorDif;
+    float currentTime;
+    float ElapsedTime;
+    float PreviousTime;
     
     template<class T>
     float PID(T value, T Reference){
-        Error = abs(Reference.getValue() - value.getValue());
-        SumError = SumError + (Error * dT);
-        ErrorDif = (Error - oldError) / dT;
-        oldError = Error;
+        currentTime = millis();
+        ElapsedTime = currentTime - PreviousTime;
 
+
+        Error = abs(Reference.getValue() - value.getValue());
+        SumError = SumError + (Error * ElapsedTime);
+        ErrorDif = (Error - oldError) / ElapsedTime;
+        oldError = Error;
+        
         return (Kp * Error) + (Ki * SumError) + (Kd * ErrorDif); 
+
+        PreviousTime = currentTime;
     }
 }
 #endif
