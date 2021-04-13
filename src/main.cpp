@@ -16,6 +16,8 @@
 #include <Serializers/Printer.h>
 #include <entities/Amperage.h>
 #include <processors/Validators.h>
+#include <entities/Direction.h>
+#include <Actuators/LedRGB.h>
 
 
 CircularBuffer<int> circularbuffer = CircularBuffer<int>(6);
@@ -23,6 +25,7 @@ TemperatureSensor sensor = TemperatureSensor(0x7E, A0);
 TemperatureSensor setpoint_Temperature = TemperatureSensor(0x7A, A1);
 AmperageSensor Amp_sensor = AmperageSensor(0x7B, A2);
 Led compressor = Led(0xAB, 22);
+LedRGB comp_RGB = LedRGB(0xAC, 4, 2, 3);
 Led Alarm_Led = Led(0xAC, 30);
 
 
@@ -59,12 +62,16 @@ void loop() {
     
     bool Compressor_Instruction = desitions(Temp, Temperature_setpoint);
     bool Compressor_Valid = Compressor_Validation(Compressor_Amperage, Amperage_Setpoint, Compressor_Instruction); 
+    int RGBDirect = RGBDirection(Compressor_Instruction, Compressor_Valid);
+    Direction RGBDir = Direction(RGBDirect, 0);
     State Compressor_State = State(Compressor_Valid, 0);
     
 
     //Accionamiento del compresor por ahora como un LED hasta implementar PID
     compressor.setValue(Compressor_State);
     compressor.execute();
+    comp_RGB.setValue(RGBDir);
+    comp_RGB.execute();
     
     //Alarma
     bool Alarm_Instruction = desitions(Compressor_Amperage, Amperage_Setpoint);
@@ -74,6 +81,7 @@ void loop() {
     Alarm_Led.execute();
 
     valuePrinter(Serial, raw_read.getValue(), "Raw Temperature");
+    valuePrinter(Serial, RGBDir.getValue(), "RGB");
     valuePrinter(Serial, Temp.getValue(), "Mean Temperature");
     valuePrinter(Serial, Temperature_setpoint.getValue(), "Set point");
     valuePrinter(Serial, Compressor_Amperage.getValue(), "Compressor Ampreage");
