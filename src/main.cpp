@@ -66,13 +66,18 @@ void loop() {
     int RGBDirect = RGBDirection(Compressor_Instruction, Compressor_Valid);
     Direction RGBDir = Direction(RGBDirect, 0);
     State Compressor_State = State(Compressor_Valid, 0);
-    
+
+    // Cálculo de salida de amperaje al compresor
+    float comp_val = PIDenvironment::PID(Temp, Temperature_setpoint);
+    Signal signal = Signal(comp_val, 0);
 
     //Accionamiento del compresor por ahora como un LED hasta implementar PID
     compressor_led.setValue(Compressor_State);
     compressor_led.execute();
     //comp_RGB.setValue(RGBDir);
     //comp_RGB.execute();
+    compressor.setValue(signal);
+    compressor.execute();
     
     //Alarma
     bool Alarm_Instruction = desitions(Compressor_Amperage, Amperage_Setpoint);
@@ -82,7 +87,7 @@ void loop() {
     Alarm_Led.execute();
 
     valuePrinter(Serial, raw_read.getValue(), "Raw Temperature");
-    valuePrinter(Serial, RGBDir.getValue(), "RGB");
+    valuePrinter(Serial, signal.getValue(), "PWM");
     valuePrinter(Serial, Temp.getValue(), "Mean Temperature");
     valuePrinter(Serial, Temperature_setpoint.getValue(), "Set point");
     valuePrinter(Serial, Compressor_Amperage.getValue(), "Compressor Ampreage");
