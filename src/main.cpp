@@ -25,9 +25,11 @@ CircularBuffer<int> circularbuffer = CircularBuffer<int>(6);
 TemperatureSensor sensor = TemperatureSensor(0x7E, A0);
 TemperatureSensor setpoint_Temperature = TemperatureSensor(0x7A, A1);
 AmperageSensor Amp_sensor = AmperageSensor(0x7B, A2);
-Led compressor_led = Led(0xAB, 22);
+Led compressor_led = Led(0xAB, 53);
 Compressor compressor = Compressor(0xAD, 4, 2, 3);
-Led Alarm_Led = Led(0xAC, 30);
+Led Alarm_Led = Led(0xAC, 51);
+double reference_Time = 0;
+int Time = 1000;
 
 
 void setup() {
@@ -40,6 +42,8 @@ void setup() {
   pinMode(Settings::Alarm_Led,OUTPUT);
 
   digitalWrite(Settings::compressor,LOW);
+  
+
 }
 
 void loop() {
@@ -86,6 +90,15 @@ void loop() {
     Alarm_Led.setValue(Alarm_State);
     Alarm_Led.execute();
 
+    
+
+    if(reference_Time == 0){
+      reference_Time = millis();
+    }
+
+    double current_Time = millis();
+
+    if ((current_Time - reference_Time) >= Time){
     valuePrinter(Serial, raw_read.getValue(), "Raw Temperature");
     valuePrinter(Serial, signal.getValue(), "PWM");
     valuePrinter(Serial, Temp.getValue(), "Mean Temperature");
@@ -94,7 +107,9 @@ void loop() {
     StatePrinter(Serial, Compressor_Valid, "Compressor State");
     StatePrinter(Serial, Alarm_Instruction, "Alarm State");
     Serial.println("");
+    reference_Time = 0;
+    }
 } 
-delay(1000);
+
   
 }

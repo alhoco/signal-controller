@@ -26,12 +26,12 @@ bool desitions(T value, T reference){
 
 namespace PIDenvironment {
     float oldError = 0;
-    float Kp = 10;
-    float Ki = 2;
-    float Kd = 0.5;
+    float Kp = 1;
+    float Ki = 0.3;
+    float Kd = 0.01;
     float Error;
-    float SumError;
-    float ErrorDif;
+    float SumError = 0;
+    float ErrorDif = 0;
     float currentTime;
     float ElapsedTime;
     float PreviousTime;
